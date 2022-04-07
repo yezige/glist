@@ -2,7 +2,7 @@ include:instagram
 include:v2ray
 include:github
 include:openwrt
-include:fcm
+# include:fcm
 
 dash.cloudflare.com
 wikimedia.org
