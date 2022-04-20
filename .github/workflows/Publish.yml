@@ -58,7 +58,7 @@ jobs:
         uses: adityak74/google-drive-upload-git-action@v0.1
         with:
           credentials: ${{ secrets.credentials }}
-          filename: ./${{ steps.package.outputs.filename }}
+          filename: ${{ steps.package.outputs.filename }}
           name: ${{ steps.package.outputs.filename }}
           folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
           overwrite: 'true'
