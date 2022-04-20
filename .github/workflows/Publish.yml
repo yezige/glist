@@ -3,8 +3,8 @@ name: Publish
 on:
   push:
     tags:
-      - "**"
-      - "!**-alpha"
+      - '**'
+      - '!**-alpha'
 jobs:
   build:
     strategy:
@@ -52,3 +52,13 @@ jobs:
           asset_path: ./${{ steps.package.outputs.filename }}
           asset_name: ${{ steps.package.outputs.filename }}
           asset_content_type: application/octet-stream
+
+      - name: Upload Google Drive
+        id: upload_google_drive
+        uses: adityak74/google-drive-upload-git-action@v0.1
+        with:
+          credentials: ${{ secrets.credentials }}
+          filename: ./${{ steps.package.outputs.filename }}
+          name: ${{ steps.package.outputs.filename }}
+          folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
+          overwrite: 'true'
