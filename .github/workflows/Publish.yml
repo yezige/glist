@@ -55,9 +55,10 @@ jobs:
 
       - name: Upload Google Drive
         id: upload_google_drive
-        uses: team-tumbleweed/gdrive-upload-action@main
+        uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.credentials }}
           folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
           filename: ${{ steps.package.outputs.filename }}
           name: ${{ steps.package.outputs.filename }}
+          overwrite: true
