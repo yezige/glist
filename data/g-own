@@ -2,6 +2,7 @@ include:instagram
 include:v2ray
 include:github
 include:openwrt
+
 # include:fcm
 
 dash.cloudflare.com
@@ -42,3 +43,4 @@ draveness.me
 go.dev
 chime.com
 imgix.net
+ifixit.com
