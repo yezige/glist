@@ -60,5 +60,5 @@ jobs:
           credentials: ${{ secrets.credentials }}
           folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
           filename: ${{ steps.package.outputs.filename }}
-          name: ${{ steps.package.outputs.filename }}
+          useCompleteSourceFilenameAsName: true,
           overwrite: true
