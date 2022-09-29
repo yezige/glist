@@ -15,6 +15,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      
+      - name: Checkout Latest GList
+        uses: actions/checkout@v3
+        with:
+          repository: cokebar/gfwlist2dnsmasq
+          path: gfwlist2dnsmasq
+
+      - name: Get Latest GList
+        run: |
+          cd gfwlist2dnsmasq || exit 1
+          chmod +x ./gfwlist2dnsmasq.sh
+          ./gfwlist2dnsmasq.sh -l -o ./temp-glist.txt
+      
+      - name: Set Latest GList
+        run: |
+          cat ./gfwlist2dnsmasq/temp-glist.txt | perl -ne '/^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/ && print "$1\n"' >> ./data/g
 
       - name: Set Go
         uses: actions/setup-go@v2
