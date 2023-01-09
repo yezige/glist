@@ -2,6 +2,7 @@ include:instagram
 include:v2ray
 include:github
 include:openwrt
+include:tmdb
 
 # include:fcm
 
