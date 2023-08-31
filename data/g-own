@@ -1,9 +1,10 @@
+include:telegram
 include:instagram
 include:v2ray
 include:github
 include:openwrt
 include:tmdb
-
+include:google
 # include:fcm
 
 dash.cloudflare.com
@@ -52,3 +53,4 @@ kiwivm.64clouds.com
 keeflys.com
 # chatGPT
 openai.com
+imgur.io
