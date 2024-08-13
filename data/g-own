@@ -5,6 +5,7 @@ include:github
 include:openwrt
 include:tmdb
 include:google
+include:openai
 # include:fcm
 
 dash.cloudflare.com
@@ -54,10 +55,6 @@ kiwivm.64clouds.com
 keeflys.com
 # 小说
 xixiwx.net
-# chatGPT
-openai.com
-chatgpt.com
-oaistatic.com
 imgur.io
 gaoqingw.com
 gaoqingw.la
