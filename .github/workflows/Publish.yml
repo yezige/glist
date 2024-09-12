@@ -43,13 +43,15 @@ jobs:
 
       - name: Package
         id: package
-        run: |
-          echo "::set-output name=filename::glist.dat"
+        run: echo "filename=glist.dat" >> $GITHUB_OUTPUT
       
       - name: Get current date
         id: date
-        run: |
-          echo "::set-output name=today::$(date +'%Y%m%d')"
+        run: echo "today=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+    
+      - name: Get latest tag
+        id: tag
+        run: echo "latest=$(wget --no-check-certificate -qO- https://api.github.com/repos/yezige/glist/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_OUTPUT
 
       - name: Create Release
         id: create_release
@@ -57,8 +59,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.date.outputs.today }}
-          release_name: Release ${{ steps.date.outputs.today }}
+          tag_name: ${{ steps.tag.outputs.latest }}.${{ steps.date.outputs.today }}
+          release_name: Release ${{ steps.tag.outputs.latest }}.${{ steps.date.outputs.today }}
           draft: false
           prerelease: false
 
