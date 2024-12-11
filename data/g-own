@@ -8,7 +8,7 @@ include:google
 include:openai
 # include:fcm
 
-dash.cloudflare.com
+cloudflare.com
 wikimedia.org
 rsshub.app
 mediawiki.org
