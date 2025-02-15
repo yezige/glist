@@ -8,36 +8,56 @@ include:google
 include:openai
 # include:fcm
 
-cloudflare.com
-wikimedia.org
-rsshub.app
-mediawiki.org
-support-splashtopbusiness.splashtop.com
+# AI
+anthropic.com
+claude.ai
+fiverr.com
+fiverrcdn.com
+huggingface.co
+
+# Coding
+react.dev
+lucide.dev
+egoist.dev
+codepen.io
+cdpn.io
+codepen.io
 stackoverflow.com
 cdn.sstatic.net
 typora.io
-jiongks.name
-codepen.io
-cdpn.io
 codegeekz.com
 readthedocs.io
-www.bkjia.com
-www.phicomm.com
 linux.die.net
 gcc.gnu.org
-viki.com
 github.community
 aka.ms
-epicgames.com
-code.jquery.com
-dubox.com
-icons8.com
-parler.com
-9to5google.com
-#music.163.com
-#music.126.net
+
+# 电影
+dygod.org
+btwuji.com
+ygdy8.com
+gaoqingw.com
+gaoqingw.la
+missav.com
+viki.com
+
+# 生活
+weather.com
+wunderground.com
+weatherfx.com
+cpu-monkey.com
+ping.pe
+temu.com
+edgeservices.bing.com
+www.bingapis.com
+xixiwx.net # 小说
+imgur.io
+keeflys.com # Emotn store
+liyuans.com # 梨园
+hostloc.com
+linux.do
+kiwivm.64clouds.com
 reface.app
-apps.apple.com
 spark.adobe.com
 finance.yahoo.com
 dev.to
@@ -46,36 +66,20 @@ go.dev
 chime.com
 imgix.net
 ifixit.com
-# 梨园
-liyuans.com
-hostloc.com
-linux.do
-kiwivm.64clouds.com
-# Emotn store
-keeflys.com
-# 小说
-xixiwx.net
-imgur.io
-gaoqingw.com
-gaoqingw.la
-missav.com
-# new bing
-edgeservices.bing.com
-www.bingapis.com
-temu.com
-ping.pe
-huggingface.co
-# claude
-anthropic.com
-claude.ai
-# weather
-weather.com
-wunderground.com
-weatherfx.com
-cpu-monkey.com
-fiverr.com
-fiverrcdn.com
-# tsup
-egoist.dev
-react.dev
-lucide.dev
+cloudflare.com
+wikimedia.org
+rsshub.app
+mediawiki.org
+support-splashtopbusiness.splashtop.com
+jiongks.name
+www.bkjia.com
+www.phicomm.com
+epicgames.com
+code.jquery.com
+dubox.com
+icons8.com
+parler.com
+9to5google.com
+#music.163.com
+#music.126.net
+apps.apple.com
