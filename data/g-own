@@ -11,6 +11,7 @@ include:openai
 # AI
 anthropic.com
 claude.ai
+intercom.io
 fiverr.com
 fiverrcdn.com
 huggingface.co
