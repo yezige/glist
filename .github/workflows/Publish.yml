@@ -45,6 +45,12 @@ jobs:
       - name: Package
         id: package
         run: echo "filename=glist.dat" >> $GITHUB_OUTPUT
+      - name: Package g
+        id: package-g
+        run: echo "filename=g.yaml" >> $GITHUB_OUTPUT
+      - name: Package gip
+        id: package-gip
+        run: echo "filename=gip.yaml" >> $GITHUB_OUTPUT
 
       - name: Get current date
         id: date
@@ -75,6 +81,26 @@ jobs:
           asset_path: ./${{ steps.package.outputs.filename }}
           asset_name: ${{ steps.package.outputs.filename }}
           asset_content_type: application/octet-stream
+      - name: Upload Release Asset g
+        id: upload_release_asset_g
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ steps.package-g.outputs.filename }}
+          asset_name: ${{ steps.package-g.outputs.filename }}
+          asset_content_type: application/octet-stream
+      - name: Upload Release Asset gip
+        id: upload_release_asset_gip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ steps.package-gip.outputs.filename }}
+          asset_name: ${{ steps.package-gip.outputs.filename }}
+          asset_content_type: application/octet-stream
 
       - name: Upload Google Drive
         id: upload_google_drive
@@ -83,4 +109,20 @@ jobs:
           credentials: ${{ secrets.credentials }}
           folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
           filename: ${{ steps.package.outputs.filename }}
+          overwrite: true
+      - name: Upload Google Drive g
+        id: upload_google_drive_g
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.credentials }}
+          folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
+          filename: ${{ steps.package-g.outputs.filename }}
+          overwrite: true
+      - name: Upload Google Drive gip
+        id: upload_google_drive_gip
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.credentials }}
+          folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
+          filename: ${{ steps.package-gip.outputs.filename }}
           overwrite: true
