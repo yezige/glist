@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -316,6 +317,45 @@ func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 	return pl, nil
 }
 
+func (l *ParsedList) toClashYaml(filename string) error {
+	f, err := os.Create(filepath.Join(*outputDir, filename))
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	w := bufio.NewWriter(f)
+	w.WriteString("payload:\n")
+
+	for _, entry := range l.Entry {
+		var line string
+		if l.Name == "GIP" {
+			c, err := rule.ParseIP(entry.Value)
+			if err != nil {
+				fmt.Println("Invalid IP in GIP:", entry.Value, err)
+				continue
+			}
+			ipStr := net.IP(c.Ip).String()
+			line = fmt.Sprintf("  - '%s/%d'", ipStr, c.Prefix)
+		} else {
+			switch entry.Type {
+			case "domain":
+				line = fmt.Sprintf("  - 'DOMAIN-SUFFIX,%s'", entry.Value)
+			case "regexp":
+				line = fmt.Sprintf("  - 'DOMAIN-REGEX,%s'", entry.Value)
+			case "keyword":
+				line = fmt.Sprintf("  - 'DOMAIN-KEYWORD,%s'", entry.Value)
+			case "full":
+				line = fmt.Sprintf("  - 'DOMAIN,%s'", entry.Value)
+			default:
+				continue
+			}
+		}
+		w.WriteString(line + "\n")
+	}
+	return w.Flush()
+}
+
 func main() {
 	flag.Parse()
 
@@ -360,6 +400,20 @@ func main() {
 			os.Exit(1)
 		}
 		fmt.Println(pl.Name)
+		if strings.EqualFold(pl.Name, "G") {
+			if err := pl.toClashYaml("g.yaml"); err != nil {
+				fmt.Println("Failed to generate g.yaml:", err)
+			} else {
+				fmt.Println("g.yaml has been generated successfully.")
+			}
+		}
+		if strings.EqualFold(pl.Name, "GIP") {
+			if err := pl.toClashYaml("gip.yaml"); err != nil {
+				fmt.Println("Failed to generate gip.yaml:", err)
+			} else {
+				fmt.Println("gip.yaml has been generated successfully.")
+			}
+		}
 		if pl.Name == "GIP" {
 			ips, err := pl.toProtoIP()
 			if err != nil {
