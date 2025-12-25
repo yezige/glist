@@ -6,6 +6,7 @@ include:openwrt
 include:tmdb
 include:google
 include:openai
+include:steam
 # include:fcm
 
 # AI
