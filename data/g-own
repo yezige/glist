@@ -36,6 +36,12 @@ gcc.gnu.org
 github.community
 aka.ms
 protobuf.dev
+code.jquery.com
+go.dev
+ping.pe
+
+# 游戏
+include:supercell
 
 # 电影
 dygod.org
@@ -52,7 +58,6 @@ weather.com
 wunderground.com
 weatherfx.com
 cpu-monkey.com
-ping.pe
 temu.com
 edgeservices.bing.com
 www.bingapis.com
@@ -68,7 +73,6 @@ spark.adobe.com
 finance.yahoo.com
 dev.to
 draveness.me
-go.dev
 chime.com
 imgix.net
 ifixit.com
@@ -81,7 +85,6 @@ jiongks.name
 www.bkjia.com
 www.phicomm.com
 epicgames.com
-code.jquery.com
 dubox.com
 icons8.com
 parler.com
