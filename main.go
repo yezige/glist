@@ -414,6 +414,13 @@ func main() {
 				fmt.Println("gip.yaml has been generated successfully.")
 			}
 		}
+		if strings.EqualFold(pl.Name, "STEAM-IP") {
+			if err := pl.toClashYaml("steam-ip.yaml"); err != nil {
+				fmt.Println("Failed to generate steam-ip.yaml:", err)
+			} else {
+				fmt.Println("steam-ip.yaml has been generated successfully.")
+			}
+		}
 		if pl.Name == "GIP" {
 			ips, err := pl.toProtoIP()
 			if err != nil {
