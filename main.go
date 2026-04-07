@@ -329,7 +329,7 @@ func (l *ParsedList) toClashYaml(filename string) error {
 
 	for _, entry := range l.Entry {
 		var line string
-		if l.Name == "GIP" {
+		if l.Name == "GIP" || l.Name == "STEAM-IP" {
 			c, err := rule.ParseIP(entry.Value)
 			if err != nil {
 				fmt.Println("Invalid IP in GIP:", entry.Value, err)
