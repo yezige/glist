@@ -42,16 +42,6 @@ jobs:
 
       - run: go run ./
 
-      - name: Package
-        id: package
-        run: echo "filename=glist.dat" >> $GITHUB_OUTPUT
-      - name: Package g
-        id: package-g
-        run: echo "filename=g.yaml" >> $GITHUB_OUTPUT
-      - name: Package gip
-        id: package-gip
-        run: echo "filename=gip.yaml" >> $GITHUB_OUTPUT
-
       - name: Get current date
         id: date
         run: echo "today=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
@@ -60,69 +50,49 @@ jobs:
         id: tag
         run: echo "latest=$(wget --no-check-certificate -qO- https://api.github.com/repos/yezige/glist/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_OUTPUT
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.date.outputs.today }}
-          release_name: Release ${{ steps.date.outputs.today }}
+          name: Release ${{ steps.date.outputs.today }}
           draft: false
           prerelease: false
+          files: |
+            glist.dat
+            g.yaml
+            gip.yaml
+            steam-ip.yaml
 
-      - name: Upload Release Asset
-        id: upload_release_asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.package.outputs.filename }}
-          asset_name: ${{ steps.package.outputs.filename }}
-          asset_content_type: application/octet-stream
-      - name: Upload Release Asset g
-        id: upload_release_asset_g
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.package-g.outputs.filename }}
-          asset_name: ${{ steps.package-g.outputs.filename }}
-          asset_content_type: application/octet-stream
-      - name: Upload Release Asset gip
-        id: upload_release_asset_gip
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.package-gip.outputs.filename }}
-          asset_name: ${{ steps.package-gip.outputs.filename }}
-          asset_content_type: application/octet-stream
-
-      - name: Upload Google Drive
-        id: upload_google_drive
+      - name: Upload Google Drive glist.dat
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.credentials }}
           folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
-          filename: ${{ steps.package.outputs.filename }}
+          filename: glist.dat
           overwrite: true
-      - name: Upload Google Drive g
-        id: upload_google_drive_g
+          
+      - name: Upload Google Drive g.yaml
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.credentials }}
           folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
-          filename: ${{ steps.package-g.outputs.filename }}
+          filename: g.yaml
           overwrite: true
-      - name: Upload Google Drive gip
-        id: upload_google_drive_gip
+          
+      - name: Upload Google Drive gip.yaml
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.credentials }}
           folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
-          filename: ${{ steps.package-gip.outputs.filename }}
+          filename: gip.yaml
+          overwrite: true
+          
+      - name: Upload Google Drive steam-ip.yaml
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.credentials }}
+          folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
+          filename: steam-ip.yaml
           overwrite: true
