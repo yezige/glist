@@ -40,6 +40,14 @@ protobuf.dev
 code.jquery.com
 go.dev
 ping.pe
+cert-manager.io
+packagist.org
+stripe.com
+smallpdf.com
+storage.googleapis.com
+postfix.org
+docker.com
+docker.io
 
 # 游戏
 include:supercell
