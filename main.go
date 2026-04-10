@@ -25,6 +25,27 @@ var (
 	exportLists = flag.String("exportlists", "", "Lists to be flattened and exported in plaintext format, separated by ',' comma")
 )
 
+type ValueType string
+
+const (
+	ValueTypeDomain ValueType = "domain"
+	ValueTypeIP     ValueType = "ip"
+)
+
+var (
+	// 需要生成的 yaml 文件
+	clashList = map[string]ValueType{
+		"G":   ValueTypeDomain,
+		"GIP": ValueTypeIP,
+		"D":   ValueTypeDomain,
+		"DIP": ValueTypeIP,
+	}
+	xrayIPList = []string{
+		"GIP",
+		"DIP",
+	}
+)
+
 type Entry struct {
 	Type  string
 	Value string
@@ -317,7 +338,7 @@ func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 	return pl, nil
 }
 
-func (l *ParsedList) toClashYaml(filename string) error {
+func (l *ParsedList) toClashYaml(filename string, valueType ValueType) error {
 	f, err := os.Create(filepath.Join(*outputDir, filename))
 	if err != nil {
 		return err
@@ -329,7 +350,7 @@ func (l *ParsedList) toClashYaml(filename string) error {
 
 	for _, entry := range l.Entry {
 		var line string
-		if l.Name == "GIP" || l.Name == "STEAM-IP" {
+		if valueType == ValueTypeIP {
 			c, err := rule.ParseIP(entry.Value)
 			if err != nil {
 				fmt.Println("Invalid IP in GIP:", entry.Value, err)
@@ -400,35 +421,25 @@ func main() {
 			os.Exit(1)
 		}
 		fmt.Println(pl.Name)
-		if strings.EqualFold(pl.Name, "G") {
-			if err := pl.toClashYaml("g.yaml"); err != nil {
-				fmt.Println("Failed to generate g.yaml:", err)
-			} else {
-				fmt.Println("g.yaml has been generated successfully.")
+		for listName, valueType := range clashList {
+			if strings.EqualFold(pl.Name, listName) {
+				if err := pl.toClashYaml(listName+".yaml", valueType); err != nil {
+					fmt.Println("Failed to generate "+listName+".yaml:", err)
+				} else {
+					fmt.Println(listName + ".yaml has been generated successfully.")
+				}
 			}
 		}
-		if strings.EqualFold(pl.Name, "GIP") {
-			if err := pl.toClashYaml("gip.yaml"); err != nil {
-				fmt.Println("Failed to generate gip.yaml:", err)
-			} else {
-				fmt.Println("gip.yaml has been generated successfully.")
+		for _, listName := range xrayIPList {
+			if strings.EqualFold(pl.Name, listName) {
+				ips, err := pl.toProtoIP()
+				if err != nil {
+					fmt.Println("Failed: ", err)
+					os.Exit(1)
+				}
+				geoIPList.Entry = append(geoIPList.Entry, ips)
+				continue
 			}
-		}
-		if strings.EqualFold(pl.Name, "STEAM-IP") {
-			if err := pl.toClashYaml("steam-ip.yaml"); err != nil {
-				fmt.Println("Failed to generate steam-ip.yaml:", err)
-			} else {
-				fmt.Println("steam-ip.yaml has been generated successfully.")
-			}
-		}
-		if pl.Name == "GIP" {
-			ips, err := pl.toProtoIP()
-			if err != nil {
-				fmt.Println("Failed: ", err)
-				os.Exit(1)
-			}
-			geoIPList.Entry = append(geoIPList.Entry, ips)
-			continue
 		}
 		site, err := pl.toProto()
 		if err != nil {
