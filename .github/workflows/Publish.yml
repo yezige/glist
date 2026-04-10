@@ -63,7 +63,8 @@ jobs:
             glist.dat
             g.yaml
             gip.yaml
-            steam-ip.yaml
+            d.yaml
+            dip.yaml
 
       - name: Upload Google Drive glist.dat
         uses: adityak74/google-drive-upload-git-action@main
@@ -89,10 +90,18 @@ jobs:
           filename: gip.yaml
           overwrite: true
           
-      - name: Upload Google Drive steam-ip.yaml
+      - name: Upload Google Drive d.yaml
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.credentials }}
           folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
-          filename: steam-ip.yaml
+          filename: d.yaml
+          overwrite: true
+      
+      - name: Upload Google Drive dip.yaml
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.credentials }}
+          folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
+          filename: dip.yaml
           overwrite: true
