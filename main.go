@@ -423,10 +423,11 @@ func main() {
 		fmt.Println(pl.Name)
 		for listName, valueType := range clashList {
 			if strings.EqualFold(pl.Name, listName) {
-				if err := pl.toClashYaml(listName+".yaml", valueType); err != nil {
-					fmt.Println("Failed to generate "+listName+".yaml:", err)
+				fileName := strings.ToLower(listName) + ".yaml"
+				if err := pl.toClashYaml(fileName, valueType); err != nil {
+					fmt.Println("Failed to generate "+fileName+":", err)
 				} else {
-					fmt.Println(listName + ".yaml has been generated successfully.")
+					fmt.Println(fileName + " has been generated successfully.")
 				}
 			}
 		}
