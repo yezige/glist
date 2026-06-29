@@ -1,4 +1,4 @@
-module github.com/v2fly/domain-list-community
+module github.com/yezige/glist
 
 go 1.16
 
