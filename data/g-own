@@ -51,6 +51,13 @@ docker.io
 
 # 游戏
 include:supercell
+epicgames.org
+
+# 人机验证
+unrealengine.com
+arkoselabs.com
+funcaptcha.com
+hcaptcha.com
 
 # 电影
 dygod.org
@@ -93,7 +100,6 @@ support-splashtopbusiness.splashtop.com
 jiongks.name
 www.bkjia.com
 www.phicomm.com
-epicgames.com
 dubox.com
 icons8.com
 parler.com

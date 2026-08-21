@@ -61,6 +61,7 @@ jobs:
           prerelease: false
           files: |
             glist.dat
+            glist-ip.dat
             g.yaml
             gip.yaml
             d.yaml
@@ -72,6 +73,14 @@ jobs:
           credentials: ${{ secrets.credentials }}
           folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
           filename: glist.dat
+          overwrite: true
+
+      - name: Upload Google Drive glist-ip.dat
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.credentials }}
+          folderId: '1xd2RHRjvMbD1Sgm7YTLwVSZl4VVLL670'
+          filename: glist-ip.dat
           overwrite: true
           
       - name: Upload Google Drive g.yaml
