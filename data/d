@@ -2,6 +2,10 @@
 include:steam
 include:microsoft
 
+# epic download
+download.epicgames.com
+fastly-download.epicgames.com
+
 gov.cn
 caissa.com.cn
 12580.com
