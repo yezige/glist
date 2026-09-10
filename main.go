@@ -148,7 +148,7 @@ func loadList(path string) (*List, error) {
 	defer file.Close()
 
 	list := &List{
-		Name: strings.ToLower(filepath.Base(path)),
+		Name: strings.ToUpper(filepath.Base(path)),
 	}
 
 	scanner := bufio.NewScanner(file)
@@ -238,7 +238,7 @@ func parseListIncludes(list *List, ref map[string]*List) (*ParsedList, error) {
 			}
 
 			hasInclude = true
-			refName := strings.ToLower(entry.Value)
+			refName := strings.ToUpper(entry.Value)
 			refList, exists := ref[refName]
 			if !exists {
 				return nil, fmt.Errorf("referenced list '%s' not found", entry.Value)
@@ -247,7 +247,7 @@ func parseListIncludes(list *List, ref map[string]*List) (*ParsedList, error) {
 			if entry.Attrs != nil {
 				// 带属性过滤的引用 (例如 include:google@cn)
 				for _, attr := range entry.Attrs {
-					inclusionKey := refName + "@" + strings.ToLower(attr.Key)
+					inclusionKey := refName + "@" + strings.ToUpper(attr.Key)
 					if pl.Inclusion[inclusionKey] {
 						continue
 					}
@@ -414,7 +414,7 @@ func main() {
 	plainTextExportSet := make(map[string]bool)
 	if *exportLists != "" {
 		for _, name := range strings.Split(*exportLists, ",") {
-			plainTextExportSet[strings.ToLower(strings.TrimSpace(name))] = true
+			plainTextExportSet[strings.ToUpper(strings.TrimSpace(name))] = true
 		}
 	}
 
@@ -442,7 +442,7 @@ func main() {
 			}
 		}
 
-				// 分类生成 GeoIP 或 GeoSite
+		// 分类生成 GeoIP 或 GeoSite
 		if ipListMap[parsedList.Name] {
 			geoIP, err := parsedList.toGeoIP()
 			if err != nil {
