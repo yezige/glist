@@ -28,16 +28,16 @@ const (
 var (
 	// clashExportMap 需要导出为 Clash YAML 的规则列表映射 (列表名 -> 规则类型)
 	clashExportMap = map[string]ValueType{
-		"g":   ValueTypeDomain,
-		"gip": ValueTypeIP,
-		"d":   ValueTypeDomain,
-		"dip": ValueTypeIP,
+		"G":   ValueTypeDomain,
+		"GIP": ValueTypeIP,
+		"D":   ValueTypeDomain,
+		"DIP": ValueTypeIP,
 	}
 
 	// ipListMap 纯 IP 规则列表集合，用于归类至 GeoIP
 	ipListMap = map[string]bool{
-		"gip": true,
-		"dip": true,
+		"GIP": true,
+		"DIP": true,
 	}
 )
 
@@ -75,19 +75,19 @@ func removeComment(line string) string {
 
 // parseDomain 解析域名部分，支持 `type:value` 显式类型指定或默认 `domain`
 func parseDomain(domain string, entry *Entry) error {
-	colonIdx := strings.Index(domain, ":")
-	if colonIdx != -1 {
-		prefix := strings.ToLower(domain[:colonIdx])
-		if prefix == "include" || prefix == "full" || prefix == "regexp" || prefix == "keyword" || prefix == "domain" {
-			entry.Type = prefix
-			entry.Value = strings.ToLower(domain[colonIdx+1:])
-			return nil
-		}
+	kv := strings.Split(domain, ":")
+	switch len(kv) {
+	case 1:
+		entry.Type = "domain"
+		entry.Value = strings.ToLower(kv[0])
+		return nil
+	case 2:
+		entry.Type = strings.ToLower(kv[0])
+		entry.Value = strings.ToLower(kv[1])
+		return nil
+	default:
+		return errors.New("invalid domain format: " + domain)
 	}
-
-	entry.Type = "domain"
-	entry.Value = strings.ToLower(domain)
-	return nil
 }
 
 // parseAttribute 解析形如 `@attr` 或 `@attr=123` 的属性标签
@@ -457,6 +457,16 @@ func main() {
 				os.Exit(1)
 			}
 			protoSiteList.Entry = append(protoSiteList.Entry, geoSite)
+		}
+
+		// 纯文本导出
+		if plainTextExportSet[parsedList.Name] {
+			txtPath := filepath.Join(*outputDir, strings.ToLower(parsedList.Name)+".txt")
+			if err := parsedList.toPlainText(txtPath); err != nil {
+				fmt.Printf("Failed to export plaintext for %s: %v\n", parsedList.Name, err)
+			} else {
+				fmt.Printf("'%s.txt' exported successfully.\n", strings.ToLower(parsedList.Name))
+			}
 		}
 	}
 
