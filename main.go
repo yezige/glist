@@ -28,16 +28,16 @@ const (
 var (
 	// clashExportMap 需要导出为 Clash YAML 的规则列表映射 (列表名 -> 规则类型)
 	clashExportMap = map[string]ValueType{
-		"G":   ValueTypeDomain,
-		"GIP": ValueTypeIP,
-		"D":   ValueTypeDomain,
-		"DIP": ValueTypeIP,
+		"g":   ValueTypeDomain,
+		"gip": ValueTypeIP,
+		"d":   ValueTypeDomain,
+		"dip": ValueTypeIP,
 	}
 
 	// ipListMap 纯 IP 规则列表集合，用于归类至 GeoIP
 	ipListMap = map[string]bool{
-		"GIP": true,
-		"DIP": true,
+		"gip": true,
+		"dip": true,
 	}
 )
 
@@ -75,19 +75,19 @@ func removeComment(line string) string {
 
 // parseDomain 解析域名部分，支持 `type:value` 显式类型指定或默认 `domain`
 func parseDomain(domain string, entry *Entry) error {
-	kv := strings.Split(domain, ":")
-	switch len(kv) {
-	case 1:
-		entry.Type = "domain"
-		entry.Value = strings.ToLower(kv[0])
-		return nil
-	case 2:
-		entry.Type = strings.ToLower(kv[0])
-		entry.Value = strings.ToLower(kv[1])
-		return nil
-	default:
-		return errors.New("invalid domain format: " + domain)
+	colonIdx := strings.Index(domain, ":")
+	if colonIdx != -1 {
+		prefix := strings.ToLower(domain[:colonIdx])
+		if prefix == "include" || prefix == "full" || prefix == "regexp" || prefix == "keyword" || prefix == "domain" {
+			entry.Type = prefix
+			entry.Value = strings.ToLower(domain[colonIdx+1:])
+			return nil
+		}
 	}
+
+	entry.Type = "domain"
+	entry.Value = strings.ToLower(domain)
+	return nil
 }
 
 // parseAttribute 解析形如 `@attr` 或 `@attr=123` 的属性标签
@@ -148,7 +148,7 @@ func loadList(path string) (*List, error) {
 	defer file.Close()
 
 	list := &List{
-		Name: strings.ToUpper(filepath.Base(path)),
+		Name: strings.ToLower(filepath.Base(path)),
 	}
 
 	scanner := bufio.NewScanner(file)
@@ -238,7 +238,7 @@ func parseListIncludes(list *List, ref map[string]*List) (*ParsedList, error) {
 			}
 
 			hasInclude = true
-			refName := strings.ToUpper(entry.Value)
+			refName := strings.ToLower(entry.Value)
 			refList, exists := ref[refName]
 			if !exists {
 				return nil, fmt.Errorf("referenced list '%s' not found", entry.Value)
@@ -247,7 +247,7 @@ func parseListIncludes(list *List, ref map[string]*List) (*ParsedList, error) {
 			if entry.Attrs != nil {
 				// 带属性过滤的引用 (例如 include:google@cn)
 				for _, attr := range entry.Attrs {
-					inclusionKey := refName + "@" + strings.ToUpper(attr.Key)
+					inclusionKey := refName + "@" + strings.ToLower(attr.Key)
 					if pl.Inclusion[inclusionKey] {
 						continue
 					}
@@ -414,7 +414,7 @@ func main() {
 	plainTextExportSet := make(map[string]bool)
 	if *exportLists != "" {
 		for _, name := range strings.Split(*exportLists, ",") {
-			plainTextExportSet[strings.ToUpper(strings.TrimSpace(name))] = true
+			plainTextExportSet[strings.ToLower(strings.TrimSpace(name))] = true
 		}
 	}
 
@@ -442,7 +442,7 @@ func main() {
 			}
 		}
 
-		// 分类生成 GeoIP 或 GeoSite
+				// 分类生成 GeoIP 或 GeoSite
 		if ipListMap[parsedList.Name] {
 			geoIP, err := parsedList.toGeoIP()
 			if err != nil {
@@ -457,16 +457,6 @@ func main() {
 				os.Exit(1)
 			}
 			protoSiteList.Entry = append(protoSiteList.Entry, geoSite)
-		}
-
-		// 纯文本导出
-		if plainTextExportSet[parsedList.Name] {
-			txtPath := filepath.Join(*outputDir, strings.ToLower(parsedList.Name)+".txt")
-			if err := parsedList.toPlainText(txtPath); err != nil {
-				fmt.Printf("Failed to export plaintext for %s: %v\n", parsedList.Name, err)
-			} else {
-				fmt.Printf("'%s.txt' exported successfully.\n", strings.ToLower(parsedList.Name))
-			}
 		}
 	}
 
