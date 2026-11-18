@@ -52,6 +52,11 @@ docker.io
 # 游戏
 include:supercell
 epicgames.org
+epicgames.com
+epicgames.dev
+gameloft.com
+gameloft.org
+disneyspeedstorm.com
 
 # 人机验证
 unrealengine.com
